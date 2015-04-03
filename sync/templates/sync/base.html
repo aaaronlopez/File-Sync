@@ -1,0 +1,26 @@
+<!doctype html>
+<html>
+  {# Load the tag library #}
+  {% load bootstrap3 %}
+
+  {# Load CSS and JavaScript #}
+  {% bootstrap_css %}
+  {% bootstrap_javascript %}
+
+  <head>
+    <title>Kloudless File Sync</title>
+  </head>
+  <body>  
+  	{% block header %}
+  	<h1>File Sync</h1>
+  	{% if user.is_authenticated %}
+  	<a href="{% url 'sync:logout' %}">Logout</a>
+  	{% endif %}
+    {% endblock %}
+
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+  	<hr />
+    {% block content %}{% endblock %}
+    {% block scripts %}{% endblock %}
+  </body>
+</html>

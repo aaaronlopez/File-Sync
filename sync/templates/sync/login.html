@@ -1,0 +1,9 @@
+{% extends 'sync/base.html' %}
+
+{% block content %}
+   <ul>
+   	<li>
+       <a href="{% url 'social:begin' 'google-oauth2' %}?next={{ request.path }}">Login with GoogleOAuth2</a>
+     </li>
+   </ul>
+{% endblock %}
