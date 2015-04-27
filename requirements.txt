@@ -2,3 +2,8 @@ Django==1.7.4
 django-extensions==1.5.1
 pyyaml==3.11
 celery==3.1.17
+django-bootstrap3==5.2.0
+redis==2.10.3
+kloudless==0.1.2
+python-social-auth==0.2.2
+

@@ -89,6 +89,61 @@ ROOT_URLCONF = 'FSP.urls'
 
 WSGI_APPLICATION = 'wsgi.application'
 
+BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+CELERY_ALWAYS_EAGER = DEBUG
+
+#LOGGING
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'mail_admins': {
+            'level': 'ERROR',
+            'class': 'django.utils.log.AdminEmailHandler'
+            },
+        'null': {
+            'level':'DEBUG',
+            'class':'django.utils.log.NullHandler',
+            },
+        'console':{
+            'level':'DEBUG',
+            'class':'logging.StreamHandler',
+            'formatter': 'verbose'
+            },
+        },
+    'formatters': {
+        'verbose': {
+            'format': '%(levelname)s|%(asctime)s|%(module)s|%(process)d|%(thread)d|%(message)s',
+            'datefmt' : "%Y-%b-%d %H:%M:%S"
+            },
+        'simple': {
+            'format': '%(levelname)s|%(message)s'
+            },
+        },
+      'loggers': {
+          'django': {
+            'handlers': ['console'],
+            'level': 'INFO',
+            'propagate': True,
+            },
+        'django.request': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+            },
+        'django.tasks': {
+            'handlers': ['mail_admins'],
+            'level': 'ERROR',
+            'propagate': True,
+            },
+        'django.management': {
+            'handlers': ['console'],
+            'level': 'DEBUG',
+            'propagate': True,
+            },
+        }
+    }
 
 # Database
 # https://docs.djangoproject.com/en/1.7/ref/settings/#databases

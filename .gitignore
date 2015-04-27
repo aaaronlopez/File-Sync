@@ -30,3 +30,6 @@ coverage.xml
 
 # C extensions
 *.so
+
+# Misc
+help.py

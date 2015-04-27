@@ -17,6 +17,10 @@ from django.core.exceptions import ObjectDoesNotExist
 
 import kloudless; kloudless.configure(api_key=settings.KLOUDLESS_API_KEY)
 
+from tasks import process
+
+from django.views.decorators.csrf import csrf_exempt
+
 def index(request):
     data = {}
     if request.user.is_authenticated():
@@ -50,13 +54,12 @@ def new_sync(request):
         messages.error("No origin account specified.") 
         return redirect('sync:index')
     if not origin_path:
-        origin_path = 'EMPTY' #STUPID FIX FOR NOW
-    
+        origin_path = '' 
     if not dest_account_id:
-        messages.error("No destination account specified.") #
+        messages.error("No destination account specified.") 
         return redirect('sync:index')
     if not dest_path:
-        dest_path = 'EMPTY' #STUPID FIX FOR NOW
+        dest_path = '' 
     
     sync_account = Sync()
     sync_account.user = request.user
@@ -118,5 +121,14 @@ def new_sync(request):
     sync_account.dest_account = dest_account
     sync_account.full_clean()
     sync_account.save()
-    #return render(request, 'sync/dashboard.html', data)
     return index(request)
+
+@csrf_exempt
+def sync_process(request):
+    import pdb
+    #pdb.set_trace()
+
+    if 'account' in request.POST:
+        account_id = request.POST['account']
+        process.delay(account_id)
+    return HttpResponse(settings.KLOUDLESS_APP_ID)

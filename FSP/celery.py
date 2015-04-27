@@ -7,9 +7,9 @@ from celery import Celery
 from django.conf import settings
 
 # set the default Django settings module for the 'celery' program.
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'proj.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'FSP.settings')
 
-app = Celery('FSP') #may have to be a different app
+app = Celery('sync') #may have to be a different app
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.
