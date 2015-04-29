@@ -24,7 +24,7 @@ with open(os.environ.get('FSP_CONFIG', os.path.join(BASE_DIR, 'config.yml'))) as
 SECRET_KEY = config['secret_key'] 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 TEMPLATE_DEBUG = DEBUG
 
