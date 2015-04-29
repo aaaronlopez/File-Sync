@@ -1,25 +1,80 @@
-{% load bootstrap3 %}
-<!doctype html>
-<html>
-
+{% load staticfiles %}
+<!DOCTYPE html>
+<html lang="en">
   <head>
-    <title>Kloudless File Sync</title>
-  </head>
-  <body>  
-  	{% block header %}
-  	<h1>File Sync</h1>
-  	{% if user.is_authenticated %}
-  	<a href="{% url 'sync:logout' %}">Logout</a>
-  	{% endif %}
-    {% endblock %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
-    <hr />
+    <title>File Sync</title>
 
+    <!-- Bootstrap core CSS -->
+    {% load bootstrap3 %}
     {% bootstrap_css %}
-    {% bootstrap_javascript %}
 
-    {% block content %}{% endblock %}
+    <!-- Custom styles for this template -->
+    <link rel="stylesheet" href="{% static 'css/cover.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'css/blog.css' %}""> -->
+
+    <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
+    <!--[if lt IE 9]><script src="../../assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+    <script src="../../assets/js/ie-emulation-modes-warning.js"></script>
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  </head>
+
+<body>
+
+    <div class="site-wrapper">
+
+      <div class="site-wrapper-inner">
+
+        <div class="cover-container">
+
+          <div class="masthead clearfix">
+            <div class="inner">
+              <!-- <h3 class="masthead-brand">File Sync</h3> -->
+              <nav>
+                <ul class="nav masthead-nav">
+                  {% if user.is_authenticated %}
+                    <li class="active"><a href="{% url 'sync:index' %}"{>My Syncs</a></li>
+                    <li><a href="{% url 'sync:logout' %}">Logout</a></li>
+                  {% endif %}
+                </ul>
+              </nav>
+            </div>
+          </div>
+
+          <div class="inner cover">
+            <h1 class="cover-heading">File Sync</h1>
+            {% block content %}{% endblock %}
+          </div>
+
+          <div class="mastfoot">
+            <div class="inner">
+              <p>Cover template for <a href="http://getbootstrap.com">Bootstrap</a>, by <a href="https://twitter.com/mdo">@mdo</a>.</p>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
     {% block scripts %}{% endblock %}
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    {% bootstrap_javascript %}
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
   </body>
 </html>

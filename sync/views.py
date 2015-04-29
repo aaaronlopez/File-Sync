@@ -26,10 +26,14 @@ def index(request):
     if request.user.is_authenticated():
         user_syncs = Sync.objects.filter(user=request.user)
         data['user_syncs'] = user_syncs
-        data['kloudless_app_id'] = settings.KLOUDLESS_APP_ID
         return render(request, 'sync/dashboard.html', data)
     else:
     	return render(request, 'sync/login.html', data)
+
+def add_sync(request):
+    data = {}
+    data['kloudless_app_id'] = settings.KLOUDLESS_APP_ID
+    return render(request, 'sync/addsync.html', data)
 
 def logout(request):
     django_logout(request)
@@ -125,9 +129,6 @@ def new_sync(request):
 
 @csrf_exempt
 def sync_process(request):
-    import pdb
-    #pdb.set_trace()
-
     if 'account' in request.POST:
         account_id = request.POST['account']
         process.delay(account_id)

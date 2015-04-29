@@ -8,27 +8,23 @@ from celery import shared_task
 from sync.models import Sync, Account, Folder, File
 
 import logging
-logger = logging.getLogger(__name__) #check logger config in settings.py
+logger = logging.getLogger(__name__) 
 
 import kloudless; kloudless.configure(api_key=settings.KLOUDLESS_API_KEY)
 
 @shared_task(ignore_result=True)
 def process(account_id):
     #To DO: add try statements where appropriate
-    #handle the case when there are more than 1 syncs with this account
-    import pdb; pdb.set_trace()
     try:
         account = Account.objects.get(kloudless_id=account_id)
     except ObjectDoesNotExist:
         logger.error("No such account with the provided account_id exists.") 
         return
-        # not sure if this should be something other than error
     try:
         sync = Sync.objects.get(origin_account=account)
     except ObjectDoesNotExist:
         logger.error("No such sync account with the provided origin account exists.") 
         return
-        # same for here:  not sure if this should be something other than error
     k_origin_account = kloudless.Account.retrieve(account.kloudless_id)
     k_origin_folder = kloudless.Folder.retrieve(id=sync.origin_root.kloudless_id,
                                                     parent_resource=k_origin_account)
@@ -49,12 +45,12 @@ def process(account_id):
             origin_file.name = metadata.name
             origin_file.path = metadata.path
             origin_file.account = account
-            origin_file.parent = sync.origin_root #fix this
+            origin_file.parent = sync.origin_root
             origin_file.full_clean()
             origin_file.save()
            
             k_origin_file = kloudless.Files.retrieve(id=current_event.id, 
-                                                    parent_resource=k_origin_account)#check this
+                                                    parent_resource=k_origin_account)
             k_dest_file = k_origin_file.copy_file(parent_id=k_dest_folder.id, 
                                                     account=k_dest_account.id)
 
@@ -63,31 +59,24 @@ def process(account_id):
             dest_file.name = k_dest_file.name
             dest_file.path = k_dest_file.path
             dest_file.account = dest_account
-            dest_file.parent = sync.dest_root #fix this
+            dest_file.parent = sync.dest_root 
             dest_file.full_clean()
             dest_file.save()
 
         #ADD SYNCING FOLDERS LATER
-        #if metadata.type == 'folder':
-        #    origin_folder = Folder 
     
     if current_event.type == 'update':
         if metadata.type == 'file':
             k_origin_file = kloudless.File.retrieve(id=current_event.id, 
-                                                    parent_resource=k_origin_account)#check this
+                                                    parent_resource=k_origin_account)
             k_dest_file = k_origin_file.copy_file(parent_id=k_dest_folder.id,
                                                     account=k_dest_account.id)
 
 
         #ADD SYNCING FOLDERS LATER    
 
-#MAKE EACH DIFFERENT EVENT INTO DIFFERENT FUNCTIONS
-        
-
     account.cursor = events.cursor
     account.full_clean()
     account.save()
-    
-    #fix what you return
-    return 1
 
+    return

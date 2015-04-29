@@ -12,74 +12,8 @@
 {% endfor %}
 </ul>
 
-<h3>Create a Sync Connection</h3>
-	<form id="new_sync" method="POST" action={% url 'sync:new-sync' %}>
-		{% csrf_token %}
-        <input type="hidden" name="origin_account_id" id="origin_account_id">
-        <input type="hidden" name="origin_id" id="origin_id">
-        <input type="hidden" name="origin_path" id="origin_path">
-        <input type="hidden" name="dest_account_id" id="dest_account_id">
-        <input type="hidden" name="dest_id" id="dest_id">
-        <input type="hidden" name="dest_path" id="dest_path">
-        
-        <p>Origin</p>
-		<input type="text" id="origin_name" name="origin_name" readonly="True" required>
-		<button type="button" id="origin_explorer">Choose an origin folder</button>
-        
-        <p>Destination</p>
-		<input type="text" id="dest_name" name="dest_name" readonly="True" required>
-		<button type="button" id="dest_explorer">Choose a destination folder</button>
-        <br><br> 
+<a href="{% url 'sync:add-sync' %}" class="btn btn-lg btn-default" >Create</a>
 
-		<input type="submit" value="Save">
-	</form>
 {% endblock %}
 
-{% block scripts %}
-{{ block.super }}
-
-<script type="text/javascript"
- src="https://static-cdn.kloudless.com/p/platform/sdk/kloudless.explorer.js"></script>
-
-<script type="text/javascript">
-    var origin_explorer = window.Kloudless.explorer({
-        app_id: "{{kloudless_app_id}}",
-        services: ['all'],
-        types: ['folders']
-    });
-
-    origin_explorer.on('success', function (files) {       
-        if (!files || files.length === 0) return;
-        var folder = files[0];
-
-        origin_account = folder.account;
-        console.log('Successfully selected folder: ', folder);
-        $("#origin_account_id").val(folder.account);
-        $("#origin_name").val(folder.name);
-        $("#origin_id").val(folder.id);
-        $("#origin_path").val(folder.path);
-    });
-
-    origin_explorer.choosify(document.getElementById('origin_explorer'));
-
-    var dest_explorer = window.Kloudless.explorer({
-        app_id: "{{kloudless_app_id}}",
-        services: ['all'],
-        types: ['folders']
-    });
-
-    dest_explorer.on('success', function (files) {       
-        if (!files || files.length === 0) return;
-        var folder = files[0];
-
-        console.log('Successfully selected folder: ', folder);
-        $("#dest_account_id").val(folder.account);
-        $("#dest_name").val(folder.name);
-        $("#dest_id").val(folder.id);
-        $("#dest_path").val(folder.path);
-    });
-
-    dest_explorer.choosify(document.getElementById('dest_explorer'));
-</script>
-{% endblock %}
 
